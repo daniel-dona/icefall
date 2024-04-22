@@ -48,6 +48,10 @@ def normalize_text(utt: str, language: str) -> str:
     utt = re.sub("’", "'", utt)
     if language == "en":
         return re.sub(r"[^a-zA-Z\s]", "", utt).upper()
+    elif language == "es":
+        return re.sub(r"[^a-záéíóúüñA-ZÁÉÍÓÚÜÑ\s]", "", utt).upper()
+    elif language == "it":
+        return re.sub(r"[^a-záéíóúA-ZÁÉÍÓÚ\s]", "", utt).upper()
     elif language == "fr":
         return re.sub(r"[^A-ZÀÂÆÇÉÈÊËÎÏÔŒÙÛÜ' ]", "", utt).upper()
     elif language == "pl":
@@ -127,7 +131,7 @@ def preprocess_commonvoice(
             text = str(sup.text)
             if len(orig_text) != len(text):
                 logging.info(
-                    f"\nOriginal text vs normalized text:\n{orig_text}\n{text}"
+                    f"\nOriginal text: \"{orig_text}\"\nNormalized text: \"{text}\""
                 )
 
         # Create long-recording cut manifests.
