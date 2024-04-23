@@ -2,8 +2,8 @@
 
 set -eou pipefail
 
-nj=16
-stage=-1
+nj=24
+stage=9
 stop_stage=100
 
 # Split data/${lang}set to this number of pieces
@@ -42,8 +42,8 @@ use_invalidated=false
 #     - speech
 
 dl_dir=$PWD/download
-release=cv-corpus-12.0-2022-12-07
-lang=fr
+release=cv-corpus-17.0-2024-03-15
+lang=es
 perturb_speed=false
 
 . shared/parse_options.sh || exit 1
@@ -86,9 +86,9 @@ if [ $stage -le 0 ] && [ $stop_stage -ge 0 ]; then
   #
   #   ln -sfv /path/to/$release $dl_dir/$release
   #
-  if [ ! -d $dl_dir/$release/$lang/clips ]; then
-    lhotse download commonvoice --languages $lang --release $release $dl_dir
-  fi
+  #if [ ! -d $dl_dir/$release/$lang/clips ]; then
+  #  lhotse download commonvoice --languages $lang --release $release $dl_dir
+  #fi
 
   # If you have pre-downloaded it to /path/to/musan,
   # you can create a symlink
@@ -333,13 +333,20 @@ if [ $stage -le 9 ] && [ $stop_stage -ge 9 ]; then
         file=$(
           find "data/${lang}/fbank/cv-${lang}_cuts_train.jsonl.gz"
         )
+        
+        echo $file
         # Prepare text.
         # Note: in Linux, you can install jq with the following command:
         # 1. wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
         # 2. chmod +x ./jq
         # 3. cp jq /usr/bin
+        #gunzip -c ${file} \
+        #  | jq '.text' | sed 's/"//g' > $lang_dir/transcript_words.txt
+          
         gunzip -c ${file} \
-          | jq '.text' | sed 's/"//g' > $lang_dir/transcript_words.txt
+          | jq ".supervisions[0].text" | sed 's/"//g' > $lang_dir/transcript_words.txt
+          
+          
 
         # Ensure space only appears once
         sed -i 's/\t/ /g' $lang_dir/transcript_words.txt
