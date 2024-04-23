@@ -2,7 +2,7 @@
 
 set -eou pipefail
 
-nj=24
+nj=6
 stage=$1
 stop_stage=100
 
@@ -75,6 +75,14 @@ if ! command -v ffmpeg &> /dev/null; then
   echo "Please install ffmpeg first"
   echo ""
   echo "  sudo apt-get install ffmpeg"
+  exit 1
+fi
+
+if ! command -v jq &> /dev/null; then
+  echo "This dataset requires jq"
+  echo "Please install jq first"
+  echo ""
+  echo "  sudo apt-get install jq"
   exit 1
 fi
 
