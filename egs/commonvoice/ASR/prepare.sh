@@ -3,7 +3,7 @@
 set -eou pipefail
 
 nj=24
-stage=9
+stage=0
 stop_stage=100
 
 # Split data/${lang}set to this number of pieces
@@ -43,7 +43,7 @@ use_invalidated=false
 
 dl_dir=$PWD/download
 release=cv-corpus-17.0-2024-03-15
-lang=es
+lang=es #en, de, it, etc...
 perturb_speed=false
 
 . shared/parse_options.sh || exit 1
@@ -81,6 +81,8 @@ fi
 if [ $stage -le 0 ] && [ $stop_stage -ge 0 ]; then
   log "Stage 0: Download data"
 
+  # Disabled as v17 is not working and probably will not work in the future as email requirement is enforced
+  
   # If you have pre-downloaded it to /path/to/$release,
   # you can create a symlink
   #
