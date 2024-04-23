@@ -3,7 +3,7 @@
 set -eou pipefail
 
 nj=24
-stage=0
+stage=$1
 stop_stage=100
 
 # Split data/${lang}set to this number of pieces
@@ -43,7 +43,7 @@ use_invalidated=false
 
 dl_dir=$PWD/download
 release=cv-corpus-17.0-2024-03-15
-lang=es #en, de, it, etc...
+lang=$2 #en, de, it, etc...
 perturb_speed=false
 
 . shared/parse_options.sh || exit 1
